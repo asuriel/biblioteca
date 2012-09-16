@@ -1,33 +1,31 @@
+
 import org.junit.Test;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
-import java.util.HashMap;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 
 public class systemTest {
 
-    Catalogue cat = new Catalogue();
-    Book booka = new Book("Game of Thrones", "available");
-    Book bookb = new Book("Great Expectations", "available");
-    cat.add(booka);
-    cat.add(bookb)
-   // HashMap<String,Book> books = new HashMap<String,Book>();
-    //books.put(booka);
-    //books.put(bookb);
+    Cataloguer cat = new Cataloguer();
+    Book aBook = new Book();
+    Book bBook = new Book();
 
-    @Test
+   @Test
   public void testCatalogueDisplaysAllBooks()
   {
    //given
+      cat.addBook("codeForBookA",aBook);
+      cat.addBook("codeForBookB",bBook);
+
       ArrayList<Book> expected = new ArrayList<Book>();
-      expected.add(booka);
-      expected.add(bookb);
+      expected.add(aBook);
+      expected.add(bBook);
    //when
-      ArrayList<Book> actual = cat.displayAllBooks();
+      ArrayList<Book> actual = cat.displayAll();
    //then
       assertTrue(expected.containsAll(actual));
   }
@@ -36,19 +34,19 @@ public class systemTest {
   public void testUserCannotReserveUnavailableBook()
   {
       //given
-      Book bookUnavailable = new Book("Das Kapital","unavailable");
-      cat.add(bookUnavailable);
+      Book bookUnavailable = new Book();
+      cat.addBook("unavailableBookCode",bookUnavailable);
+      Boolean firstTry = cat.reserve(bookUnavailable);
       //when
-      Boolean response = cat.reserve(bookUnavailable);
+      Boolean secondTry = cat.reserve(bookUnavailable);
       //then
-      assertThat(response, is(false)) ;
+      assertThat(secondTry, is(false)) ;
   }
    @Test
    public void testUserCanReserveAvailableBook()
    {
        //given
-       Book bookAvailable = new Book("PhD Thesis","available");
-       cat.add(bookAvailable);
+       Book bookAvailable = new Book();
        //when
        Boolean response = cat.reserve(bookAvailable);
        //then
