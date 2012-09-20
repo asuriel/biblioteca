@@ -52,18 +52,7 @@ public class testConsole {
         String[] actual = outputStream.toString().split("\n");
         assertTrue(actual[actual.length - 1].equals("You are inside the catalogue!"));
     }
-    @Test
-    public void testMenuOptionReserve() throws Exception {
-        //given
-        TestInput testInput = new TestInput("Reserve Book");
-        console = new ConsoleControl(testInput);
-        //when
-        console.init();
-        console.readMenuInput();
-        //then
-        String[] actual = outputStream.toString().split("\n");
-        assertTrue(actual[actual.length - 1].equals("Choose the book to reserve"));
-    }
+
 
     @Test
     public void testMenuOptionEnquire() throws Exception {
@@ -77,6 +66,33 @@ public class testConsole {
         String[] actual = outputStream.toString().split("\n");
         assertTrue(actual[actual.length - 1].equals("Ask our helpful librarian"));
     }
+
+    @Test
+    public void testReserveABookAvailable(){
+        //given
+        TestInput testInput = new TestInput("Reserve Book\nDas Kapital");
+        console = new ConsoleControl(testInput);
+        //when
+        console.init();
+        console.readMenuInput();
+        //then
+        String[] actual = outputStream.toString().split("\n");
+        assertTrue(actual[actual.length - 1].equals("Your book has been reserved"));
+    }
+
+    @Test
+    public void testReserveABookUnavailable(){
+        //given
+        TestInput testInput = new TestInput("Reserve Book\nHunger Games");
+        console = new ConsoleControl(testInput);
+        //when
+        console.init();
+        console.readMenuInput();
+        //then
+        String[] actual = outputStream.toString().split("\n");
+        assertTrue(actual[actual.length - 1].equals("We don't have that book yet"));
+    }
+
 
 
 }
