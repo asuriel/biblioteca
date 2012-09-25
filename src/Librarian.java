@@ -5,7 +5,7 @@ public class Librarian {
     private Assistant assistant;
 
 
-    public Librarian(Assistant assistant) {
+    public Librarian() {
 
         assistant = ServiceLocator.getFinder();
     }

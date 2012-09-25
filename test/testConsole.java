@@ -21,6 +21,8 @@ public class testConsole {
     @Before
     public void setUp() throws Exception {
 
+        ServiceLocator.load(new ServiceLocator(new TextCatalogue()));
+
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
@@ -52,7 +54,7 @@ public class testConsole {
         TestInput testInput = new TestInput("Catalogue");
 
         Item example = new Item("Das Kapital");
-        librarian.addBook("1",example); //we have now one book in the catalogue
+        librarian.addItem("1", example); //we have now one book in the catalogue
 
         //when
         console.init(testInput,librarian);
@@ -80,9 +82,11 @@ public class testConsole {
 
 
     @Test
-    @Ignore
     public void testReserveABookAvailable(){
         //given
+        Item example = new Item("Das Kapital");
+        librarian.addItem("1", example); //we have now one book in the catalogue
+
         TestInput testInput = new TestInput("Reserve Item\nDas Kapital");
 
         //when
@@ -95,7 +99,6 @@ public class testConsole {
     }
 
     @Test
-    @Ignore
     public void testReserveABookUnavailable(){
         //given
         TestInput testInput = new TestInput("Reserve Item\nHunger Games");

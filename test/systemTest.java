@@ -1,4 +1,5 @@
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,22 +11,28 @@ import static org.junit.Assert.assertTrue;
 
 public class systemTest {
 
-    Cataloguer cat = new Cataloguer();
-    Book aBook = new Book();
-    Book bBook = new Book();
+    Librarian librarian = new Librarian();
+    Item aBook = new Item();
+    Item bBook = new Item();
+
+    @Before
+    public void configureForTextCatalogue()
+    {
+        ServiceLocator.load(new ServiceLocator(new TextCatalogue()));
+    }
 
    @Test
   public void testCatalogueDisplaysAllBooks()
   {
    //given
-      cat.addBook("codeForBookA",aBook);
-      cat.addBook("codeForBookB",bBook);
+      librarian.addItem("codeForBookA", aBook);
+      librarian.addItem("codeForBookB", bBook);
 
-      ArrayList<Book> expected = new ArrayList<Book>();
+      ArrayList<Item> expected = new ArrayList<Item>();
       expected.add(aBook);
       expected.add(bBook);
    //when
-      ArrayList<Book> actual = cat.displayAll();
+      ArrayList<Item> actual = librarian.displayAll();
    //then
       assertTrue(expected.containsAll(actual));
   }
@@ -34,11 +41,11 @@ public class systemTest {
   public void testUserCannotReserveUnavailableBook()
   {
       //given
-      Book bookUnavailable = new Book();
-      cat.addBook("unavailableBookCode",bookUnavailable);
-      Boolean firstTry = cat.reserve(bookUnavailable);
+      Item bookUnavailable = new Item();
+      librarian.addItem("unavailableBookCode", bookUnavailable);
+      Boolean firstTry = librarian.reserve(bookUnavailable);
       //when
-      Boolean secondTry = cat.reserve(bookUnavailable);
+      Boolean secondTry = librarian.reserve(bookUnavailable);
       //then
       assertThat(secondTry, is(false)) ;
   }
@@ -46,9 +53,9 @@ public class systemTest {
    public void testUserCanReserveAvailableBook()
    {
        //given
-       Book bookAvailable = new Book();
+       Item bookAvailable = new Item();
        //when
-       Boolean response = cat.reserve(bookAvailable);
+       Boolean response = librarian.reserve(bookAvailable);
        //then
        assertTrue(response);
    }
