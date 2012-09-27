@@ -1,5 +1,4 @@
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -51,7 +50,7 @@ public class testConsole {
 
         //when
         console.init(testInput, librarian);
-        console.readMenuInput();
+        console.assignLibraryAccion();
 
         //then
         String[] actual = outputStream.toString().split("\n");
@@ -66,7 +65,7 @@ public class testConsole {
 
         //when
         console.init(testInput, librarian);
-        console.readMenuInput();
+        console.assignLibraryAccion();
 
         //then
         String[] actual = outputStream.toString().split("\n");
@@ -85,7 +84,7 @@ public class testConsole {
         //when
         console.init(testInput, librarian);
 
-        console.readMenuInput();
+        console.assignLibraryAccion();
         //then
         String[] actual = outputStream.toString().split("\n");
         assertTrue(actual[actual.length - 1].equals("Your item has been reserved"));
@@ -98,7 +97,7 @@ public class testConsole {
 
         //when
         console.init(testInput, librarian);
-        console.readMenuInput();
+        console.assignLibraryAccion();
         //then
         String[] actual = outputStream.toString().split("\n");
         assertTrue(actual[actual.length - 1].equals("We don't have that item yet"));
@@ -111,7 +110,7 @@ public class testConsole {
 
         //when
         console.init(testInput, librarian);
-        console.readMenuInput();
+        console.assignLibraryAccion();
         //then
         String[] actual = outputStream.toString().split("\n");
         assertTrue(actual[actual.length - 1].equals("The item is on loan"));

@@ -1,13 +1,16 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Librarian {
 
     private Assistant assistant;
+    private HashMap<String,User> users;
 
 
     public Librarian() {
 
         assistant = ServiceLocator.getFinder();
+        users = new HashMap<String, User>();
     }
 
     public void loadLibrary() {
@@ -26,6 +29,30 @@ public class Librarian {
         assistant.AddItem("6", sixth);
     }
 
+    public void loadUsers(){
+        User me = new User("Aurora","password","aurora@aurora.com","my house") ;
+        User monster = new User("Grooo","pwd","argh@gmail.com","the bridge");
+        users.put("111-1111",me);
+        users.put("111-1112",monster);
+
+    }
+    public boolean validateUser(String pwd, User user)
+    {
+        return user.isValidPassword(pwd);
+    }
+
+    public boolean logUserIn(String userName, String pwd){
+       boolean successful = false;
+
+      for(String uName: users.keySet())
+      {
+          if(uName.equals(userName))
+          {
+              successful= validateUser(pwd,users.get(uName));
+          }
+      }
+        return successful;
+    }
     public void addItem(String code, Item a) {
         assistant.AddItem(code, a);
     }
@@ -50,4 +77,8 @@ public class Librarian {
         return assistant.findByTitle(title);
     }
 
+    public String getUserDetails(String userName) {
+        User user =   users.get(userName);
+        return user.displayDetails();
+    }
 }

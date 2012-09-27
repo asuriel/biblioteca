@@ -5,6 +5,9 @@ public class Console {
 
     private Scanner scanner;
     private Librarian librarian;
+    private boolean loggedIn;
+    private boolean systemWorking = true;
+    private String currentUser;
 
     public Console() {
     }
@@ -14,6 +17,8 @@ public class Console {
         scanner = new Scanner(in);
         this.librarian = librarian;
         librarian.loadLibrary();
+        librarian.loadUsers();
+        loggedIn = false;
 
         System.out.println("Welcome to the wonderful Biblioteca!\nWhat do you wish to do now?\n\n\n" +
                 "Catalogue\n" +
@@ -21,44 +26,77 @@ public class Console {
                 "Enquire");
     }
 
-    public String readLine() {
-        String line = scanner.nextLine();
+    public String readInput() {
 
-        if (line.equals("exit")) {
-            return ("bye!");
+        //while (scanner.hasNext()) {
+        String option = scanner.nextLine();
+
+        if (option.equals("exit")) {
+            systemWorking = false;
+            return "Bye!";
         }
-        return line;
+        return option;
+        //}
     }
 
-    public void readMenuInput() {
+    public void assignLibraryAccion() {
+        String option = readInput();
 
-
-        while (scanner.hasNext()) {
-            String option = scanner.nextLine();
+        while (systemWorking) {
 
             if (option.equals("Catalogue")) {
                 System.out.println("Movies");
-                if (scanner.nextLine().equals("Movies")) {
+                if (readInput().equals("Movies")) {
                     displayAllItems();
                 }
-                readMenuInput();
+                assignLibraryAccion();
+
             } else if (option.equals("Reserve Item")) {
-                System.out.println("Choose the book to reserve");
-                String bookTitle = scanner.nextLine();
-                System.out.println(reserveBook(bookTitle));
-                readMenuInput();
+                if (loggedIn) {
+                    System.out.println("Choose the book to reserve");
+                    String bookTitle = readInput();
+                    System.out.println(reserveBook(bookTitle));
+                } else {
+                    System.out.println("Please Login");
+                }
+
+                assignLibraryAccion();
+
             } else if (option.equals("Enquire")) {
-                System.out.println("Ask our helpful librarian");
-                readMenuInput();
-            } else if (option.equals("exit")) {
-                //flag = false;
-                System.out.println("bye bye!");
-                System.exit(0);
+                if (loggedIn) {
+                    System.out.println(librarian.getUserDetails(currentUser));
+                } else {
+                    System.out.println("Ask our helpful librarian");
+                }
+                assignLibraryAccion();
+
+            } else if (option.equals("Login")) {
+                logUserIn();
+                assignLibraryAccion();
+
             } else {
                 System.out.println("Select a valid option!!");
-                readMenuInput();
+                assignLibraryAccion();
             }
         }
+    }
+
+    public void logUserIn() {
+
+        System.out.println("Please enter your userName");
+        String uName = readInput();
+        System.out.println("Please enter your passWord");
+        String pwd = readInput();
+
+        if (librarian.logUserIn(uName, pwd)) {
+            loggedIn = true;
+            currentUser = uName;
+            System.out.println("Your login was successful");
+        } else {
+            System.out.println("Sorry, try again");
+            logUserIn();
+        }
+
     }
 
     public String reserveBook(String title) {
@@ -82,5 +120,6 @@ public class Console {
             System.out.println(b.displayDetails());
         }
     }
+
 
 }

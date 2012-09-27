@@ -5,10 +5,11 @@ public class Engine {
 
         ServiceLocator.load(new ServiceLocator(new TextCatalogue()));
         Librarian librarian = new Librarian();
-
+        //Scanner scanner = new Scanner();
         Console control = new Console();
         control.init(System.in, librarian);
-        control.readMenuInput();
+        control.assignLibraryAccion();
+        //control.readInput();
 
     }
 }
